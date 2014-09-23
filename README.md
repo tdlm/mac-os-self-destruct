@@ -37,7 +37,7 @@ Once you have installed the cron process and it is actively working, you can sta
 
 To get to the Tags area, right click on the file(s) you wish to tag and select "Tags..."
 
-![Open Tags Menu](tags-menu.png)
+![Open Tags Menu](http://scottmw.com/wp-content/uploads/2014/09/tags-menu.png)
 
 *Select Desired Tag*
 
@@ -49,17 +49,17 @@ Assign one of the predetermined tags to the file (spelling/spacing are important
 - 1 Week
 - 1 Year
 
-![Select Desired Tag](tags-assign.png)
+![Select Desired Tag](http://scottmw.com/wp-content/uploads/2014/09/tags-assign.png)
 
 *Verify Tag*
 
 You can verify the tag was placed on the file(s) by doing a simple search (e.g. "1 Day") and selecting the tags option.
 
-![Search for Tag](tags-search.png)
+![Search for Tag](http://scottmw.com/wp-content/uploads/2014/09/tags-search.png)
 
 Once you've searched for the tag, you can see any files slated for self destruct.
 
-![Verify Tag by Search](1day-delete.png)
+![Verify Tag by Search](http://scottmw.com/wp-content/uploads/2014/09/1day-delete.png)
 
 And now we wait.
 
