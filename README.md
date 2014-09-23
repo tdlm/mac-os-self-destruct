@@ -11,7 +11,7 @@ For example, if a file is tagged with "1 Week" then it will be deleted at the ti
 
 This allows you to put a self-destruct on files you would otherwise forget about, leaving your system crowded with junk.
 
-#### WARNING: If you tag a file that was modified in the past, the time-to-delete will be in the past and it may be deleted on the next run of Self Destruct. This script uses *srm* (Secure Remove), which will not only erase the file(s), but will use a multi-pass erase which render the files un-recoverable and un-traceable.
+#### WARNING: This script uses *srm* (Secure Remove), which will not only erase the file(s), but will use a multi-pass erase which render the files un-recoverable and un-traceable.
 
 ### HELP
 
