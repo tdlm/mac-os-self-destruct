@@ -1,5 +1,7 @@
 #!/bin/sh
 
+SELF_DESTRUCT_VERSION="0.92"
+
 secure_delete_files_for_tag_after_seconds () {
 
 	if [ -z "$1" ]; then
@@ -29,6 +31,104 @@ secure_delete_files_for_tag_after_seconds () {
             fi
         fi;
     done
+	
+}
+
+install () {
+	
+	local script_name="self-destruct.sh"
+	local script_install_path="$HOME/bin/$script_name"
+	
+	local plist_root="com.github.tdlm.os-x-self-destruct"
+	local plist_name="$plist_root.plist"
+	local plist_install_path="$HOME/Library/LaunchAgents/$plist_name"
+	
+	echo "Copying self to $script_install_path"
+	cp -f $script_name $script_install_path
+	chmod +x $script_install_path
+
+	local user=`whoami`
+	
+	local is_plist_loaded=$(launchctl list | grep -c "$plist_root")
+	
+	if [ $is_plist_loaded -gt 0 ]; then
+		echo "Plist found. Unloading before install..."
+		launchctl unload $plist_install_path
+	else
+		echo "Plist not found. Loading fresh..."
+	fi
+	
+	echo "Generating plist for user and installing: $plist_install_path"
+	cat $plist_name | sed "s/{USERNAME}/$user/g" > $plist_install_path
+	launchctl load -w -F $plist_install_path
+	
+}
+
+uninstall () {
+	local script_name="self-destruct.sh"
+	local script_install_path="$HOME/bin/$script_name"
+
+	local plist_root="com.github.tdlm.os-x-self-destruct"
+	local plist_name="$plist_root.plist"
+	local plist_install_path="$HOME/Library/LaunchAgents/$plist_name"
+	
+	local is_plist_loaded=$(launchctl list | grep -c "$plist_root")	
+
+	if [ -f $script_install_path ]; then
+		echo "Removing script..."
+		srm -f $script_install_path
+	fi
+	
+	if [ $is_plist_loaded -gt 0 ]; then
+		echo "Unloading plist"
+		launchctl unload $plist_install_path
+	fi
+	
+	if [ -f $plist_install_path ]; then
+		echo "Removing $plist_install_path..."
+		srm -f $plist_install_path
+	fi
+	
+	echo "Uninstall complete"
+}
+
+show_usage() {
+	
+	cat <<EOF
+Self Destruct v${SELF_DESTRUCT_VERSION} for Mac OS X
+
+Securely destroys files or directories on a delay based on their OS X "Tag"
+
+Available Tags: 1 Minute, 1 Hour, 1 Day, 1 Week, 1 Month, 1 Year
+
+For example, if a file is tagged with "1 Week" then it will be deleted at
+the time exactly one week from the last time the file was modified.
+
+WARNING:  This script uses srm (Secure Remove), which will not only erase
+the file(s), but will use a multi-pass erase which render the files
+un-recoverable and un-traceable.
+
+RUNNING MANUALLY
+
+	self-destruct.sh --run
+
+HELP
+	
+	self-destruct.sh --help
+
+INSTALLATION FROM REPOSITORY
+
+	git clone git@github.com:tdlm/os-x-self-destruct.git
+	cd os-x-self-destruct && ./self-destruct.sh --install
+
+UNINSTALL
+
+	self-destruct.sh --uninstall
+
+Copyright (c) Scott Weaver <http://scottmw.com/>
+EOF
+exit 2
+
 }
 
 if [ "$1" = "-r" -o "$1" = "--run" ]; then
@@ -39,41 +139,16 @@ if [ "$1" = "-r" -o "$1" = "--run" ]; then
 	secure_delete_files_for_tag_after_seconds "1 Week" 604800
 	secure_delete_files_for_tag_after_seconds "1 Month" 2592000
 	secure_delete_files_for_tag_after_seconds "1 Year" 31557600
+	
+elif [ "$1" = "-i" -o "$1" = "--install" ]; then
+
+	install
+	
+elif [ "$1" = "-u" -o "$1" = "--uninstall" ]; then
+
+	uninstall
 
 else
-	cat <<EOF
-Self Destruct v0.9 for Mac OS X
-
-Securely destroys files or directories on a delay based on their OS X "Tag"
-
-Available Tags: 1 Minute, 1 Hour, 1 Day, 1 Week, 1 Month, 1 Year
-
-For example, if a file is tagged with "1 Week" then it will be deleted at
-the time exactly one week from the last time the file was modified.
-
-WARNING: If you tag a file that was modified in the past, the time-to-delete
-will be in the past and it may be deleted on the next run of Self Destruct.
-
-RUNNING
-
-	chmod +x self-destruct.sh
-	./self-destruct.sh --run
-
-HELP
-
-	./self-destruct.sh --help
-
-INSTALLATION
-
-To install Self Destruct, copy this file to a permanent location and put the
-following entry in your crontab:
-
-	*/1 * * * * /path/to/self-destruct.sh --run
-
-This will run Self Destruct every minute.
-
-Copyright (c) Scott Weaver <http://scottmw.com/>
-EOF
-	exit;
+	show_usage
 fi
 

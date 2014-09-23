@@ -1,7 +1,7 @@
 # OS X Self Destruct
 ==================
 
-Version: 0.9
+Version: 0.92
 
 Securely destroys files or directories on a delay based on their OS X "Tag."
 
@@ -21,13 +21,10 @@ This allows you to put a self-destruct on files you would otherwise forget about
 
 #### INSTALLATION
 
-To install Self Destruct, copy this file to a permanent location and put the following entry in your crontab (making sure to point to the path you place the file in):
-
 ```bash
-* * * * * /path/to/self-destruct.sh --run
+git clone git@github.com:tdlm/os-x-self-destruct.git
+cd os-x-self-destruct && ./self-destruct.sh --install
 ```
-
-This will run Self Destruct every minute.
 
 #### USAGE
 
