@@ -20,15 +20,20 @@ chmod +x self-destruct.sh
 
 ### HELP
 
-	./self-destruct.sh --help
+```bash
+./self-destruct.sh --help
+```
 
 #### INSTALLATION
 
-To install Self Destruct, copy this file to a permanent location and put the
-following entry in your crontab:
+To install Self Destruct, copy this file to a permanent location and put the following entry in your crontab (making sure to point to the path you place the file in):
 
-	*/1 * * * * /path/to/self-destruct.sh --run
+```bash
+* * * * * /path/to/self-destruct.sh --run
+```
 
 This will run Self Destruct every minute.
+
+
 
 Copyright &copy; [Scott Weaver](http://scottmw.com/)
