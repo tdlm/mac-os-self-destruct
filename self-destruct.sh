@@ -18,7 +18,7 @@ secure_delete_files_for_tag_after_seconds () {
     current_stamp=$(date +%s)
     
     mdfind "tag:$1" | while read f; do
-        file_modified=$(stat -f %m "$f")
+        file_modified=$(stat -f %c "$f")
         file_diff=$((current_stamp-file_modified))
     
         if [ $file_diff -ge $2 ]; then
