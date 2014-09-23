@@ -62,6 +62,7 @@ install () {
 	cat $plist_name | sed "s/{USERNAME}/$user/g" > $plist_install_path
 	launchctl load -w -F $plist_install_path
 	
+	echo "Installation complete"
 }
 
 uninstall () {
