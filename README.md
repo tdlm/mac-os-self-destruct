@@ -13,6 +13,9 @@ This allows you to put a self-destruct on files you would otherwise forget about
 
 #### WARNING: This script uses *srm* (Secure Remove), which will not only erase the file(s), but will use a multi-pass erase which render the files un-recoverable and un-traceable.
 
+### SYSTEM REQUIREMENTS
+Tested to work on OS X 10.9, OS X 10.10
+
 ### HELP
 
 ```bash
