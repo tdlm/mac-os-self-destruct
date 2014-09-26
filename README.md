@@ -26,7 +26,7 @@ Tested to work on OS X 10.9, OS X 10.10
 
 ```bash
 git clone git@github.com:tdlm/os-x-self-destruct.git
-cd os-x-self-destruct && ./self-destruct.sh --install
+./os-x-self-destruct/self-destruct.sh --install
 ```
 
 #### USAGE
@@ -65,13 +65,17 @@ And now we wait.
 
 ### RUNNING MANUALLY
 
-If you want to
+Run manually when installed:
 
 ```bash
-chmod +x self-destruct.sh
-./self-destruct.sh --run
+self-destruct --run
 ```
 
+Run manually when NOT installed:
+
+```bash
+./path/to/repo/self-destruct.sh --run
+```
 
 ### Disclaimer
 
