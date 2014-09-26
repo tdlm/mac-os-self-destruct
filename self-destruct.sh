@@ -34,22 +34,23 @@ secure_delete_files_for_tag_after_seconds () {
 
 }
 
+load_configuration () {
+	script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+	script_install_path="/usr/local/bin/self-destruct"
+	plist_name="com.github.tdlm.os-x-self-destruct"
+	plist_path="$script_dir/$plist_name.plist"
+	plist_install_path="$HOME/Library/LaunchAgents/$plist_name.plist"
+	is_plist_loaded=$(launchctl list | grep -c "$plist_name")
+}
+
 install () {
-
-	local script_name="self-destruct.sh"
-	local script_install_path="$HOME/bin/$script_name"
-
-	local plist_root="com.github.tdlm.os-x-self-destruct"
-	local plist_name="$plist_root.plist"
-	local plist_install_path="$HOME/Library/LaunchAgents/$plist_name"
+	load_configuration
 
 	echo "Copying self to $script_install_path"
-	cp -f $script_name $script_install_path
+	cp -f $0 $script_install_path
 	chmod +x $script_install_path
 
 	local user=`whoami`
-
-	local is_plist_loaded=$(launchctl list | grep -c "$plist_root")
 
 	if [ $is_plist_loaded -gt 0 ]; then
 		echo "Plist found. Unloading before install..."
@@ -59,21 +60,16 @@ install () {
 	fi
 
 	echo "Generating plist for user and installing: $plist_install_path"
-	cat $plist_name | sed "s/{USERNAME}/$user/g" > $plist_install_path
+	cat $plist_path | sed -e "s#{SCRIPT_INSTALL_PATH}#'$script_install_path'#g" > $plist_install_path
 	launchctl load -w -F $plist_install_path
 
-	echo "Installation complete"
+	echo "Installation complete!"
 }
 
 uninstall () {
-	local script_name="self-destruct.sh"
-	local script_install_path="$HOME/bin/$script_name"
+	load_configuration
 
-	local plist_root="com.github.tdlm.os-x-self-destruct"
-	local plist_name="$plist_root.plist"
-	local plist_install_path="$HOME/Library/LaunchAgents/$plist_name"
-
-	local is_plist_loaded=$(launchctl list | grep -c "$plist_root")
+	local is_plist_loaded=$(launchctl list | grep -c "$plist_name")
 
 	if [ -f $script_install_path ]; then
 		echo "Removing script..."
@@ -90,7 +86,7 @@ uninstall () {
 		srm -f $plist_install_path
 	fi
 
-	echo "Uninstall complete"
+	echo "Uninstall complete!"
 }
 
 show_usage() {

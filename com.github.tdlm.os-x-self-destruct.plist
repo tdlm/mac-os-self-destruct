@@ -7,7 +7,7 @@
 
 		<key>ProgramArguments</key>
 		<array>
-			<string>/Users/{USERNAME}/bin/self-destruct.sh</string>
+			<string>{SCRIPT_INSTALL_PATH}</string>
 			<string>--run</string>
 		</array>
 
