@@ -23,7 +23,7 @@
 		<!-- log files
 		  <key>StandardErrorPath</key>
 		  <string>/tmp/os-x-self-destruct.err</string>
-		
+
 		  <key>StandardOutPath</key>
 		  <string>/tmp/os-x-self-destruct.out</string>
 		-->

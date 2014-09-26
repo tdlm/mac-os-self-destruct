@@ -65,7 +65,7 @@ And now we wait.
 
 ### RUNNING MANUALLY
 
-If you want to 
+If you want to
 
 ```bash
 chmod +x self-destruct.sh
