@@ -7,7 +7,7 @@
 
 		<key>ProgramArguments</key>
 		<array>
-			<string>/Users/{USERNAME}/bin/self-destruct.sh</string>
+			<string>{SCRIPT_INSTALL_PATH}</string>
 			<string>--run</string>
 		</array>
 
@@ -23,7 +23,7 @@
 		<!-- log files
 		  <key>StandardErrorPath</key>
 		  <string>/tmp/os-x-self-destruct.err</string>
-		
+
 		  <key>StandardOutPath</key>
 		  <string>/tmp/os-x-self-destruct.out</string>
 		-->
