@@ -122,7 +122,7 @@ UNINSTALL
 
 	self-destruct.sh --uninstall
 
-Copyright (c) Scott Weaver <http://scottmw.com/>
+Licensed under GNU GPL v2.0 by Scott Weaver <http://scottmw.com>
 EOF
 exit 2
 
