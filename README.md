@@ -1,9 +1,11 @@
 # OS X Self Destruct
 ==================
 
-Author: [Scott Weaver](http://scottmw.com/)
-License: GNU GPL v2.0 (see LICENSE.txt)
-Version: 0.92
+**Author**: [Scott Weaver](http://scottmw.com/)
+
+**License**: GNU GPL v2.0 (see LICENSE.txt)
+
+**Version**: 0.92
 
 Securely destroys files or directories on a delay based on their OS X "Tag."
 
