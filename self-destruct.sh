@@ -106,7 +106,8 @@ Self Destruct v${SELF_DESTRUCT_VERSION} for Mac OS X
 
 Securely destroys files or directories on a delay based on their OS X "Tag"
 
-Available Tags: 1 Minute, 1 Hour, 1 Day, 1 Week, 1 Month, 1 Year
+Available Tags: 1 Minute, 1 Hour, 1 Day, 1 Week, 1 Month, 1 Year.
+Multiplications of these tags are also supported (10 Minutes, 3 Hours, etc.).
 
 For example, if a file is tagged with "1 Week" then it will be deleted at
 the time exactly one week from the last time the file was modified.
@@ -117,20 +118,20 @@ un-recoverable and un-traceable.
 
 RUNNING MANUALLY
 
-	self-destruct.sh --run
+	$0 --run
 
 HELP
 
-	self-destruct.sh --help
+	$0 --help
 
 INSTALLATION FROM REPOSITORY
 
 	git clone git@github.com:tdlm/os-x-self-destruct.git
-	cd os-x-self-destruct && ./self-destruct.sh --install
+	./os-x-self-destruct/self-destruct.sh --install
 
 UNINSTALL
 
-	self-destruct.sh --uninstall
+	$0 --uninstall
 
 Copyright (c) Scott Weaver <http://scottmw.com/>
 EOF
