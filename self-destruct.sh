@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 SELF_DESTRUCT_VERSION="0.92"
 
