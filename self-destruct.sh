@@ -2,6 +2,16 @@
 
 SELF_DESTRUCT_VERSION="0.92"
 
+is_valid_timestamp() {
+	PATTERN='^[0-9]\+\s\(Minutes\?\|Hours\?\|Days\?\|Weeks\?\|Years\?\)$'
+	echo $* | grep -o $PATTERN > /dev/null
+	return $?
+}
+
+convert_tag_to_timestamp() {
+	echo $(($(date -d "+$1" "+%s") - $(date "+%s")))
+}
+
 secure_delete_files_for_tag_after_seconds () {
 
 	if [ -z "$1" ]; then
@@ -20,7 +30,7 @@ secure_delete_files_for_tag_after_seconds () {
     current_stamp=$(date +%s)
 
     mdfind "tag:$1" | while read f; do
-        file_modified=$(stat -f %c "$f")
+        file_modified=$(stat -c%Y "$f")
         file_diff=$((current_stamp-file_modified))
 
         if [ $file_diff -ge $2 ]; then
@@ -130,12 +140,19 @@ exit 2
 
 if [ "$1" = "-r" -o "$1" = "--run" ]; then
 
-	secure_delete_files_for_tag_after_seconds "1 Minute" 60
-	secure_delete_files_for_tag_after_seconds "1 Hour" 3600
-	secure_delete_files_for_tag_after_seconds "1 Day" 86400
-	secure_delete_files_for_tag_after_seconds "1 Week" 604800
-	secure_delete_files_for_tag_after_seconds "1 Month" 2592000
-	secure_delete_files_for_tag_after_seconds "1 Year" 31557600
+	TAGS=$(mdfind -0 "(kMDItemUserTags == '*')" | \
+		xargs -0 mdls -name kMDItemUserTags | grep '^    ' | cut -c5- | cut -d , -f 1 | sort -u)
+
+	while read -r TAG; do
+		# Remove quotes
+		TAG=$(echo -n $TAG | tr -d '"')
+
+		if is_valid_timestamp $TAG; then
+			secure_delete_files_for_tag_after_seconds "$TAG" $(convert_tag_to_timestamp "$TAG")
+		else
+			echo "Invalid tag: $TAG"
+		fi
+	done <<< "$TAGS"
 
 elif [ "$1" = "-i" -o "$1" = "--install" ]; then
 
