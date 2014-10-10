@@ -9,7 +9,8 @@
 
 Securely destroys files or directories on a delay based on their OS X "Tag."
 
-Available Tags: 1 Minute, 1 Hour, 1 Day, 1 Week, 1 Month, 1 Year
+Available Tags: 1 Minute, 1 Hour, 1 Day, 1 Week, 1 Month, 1 Year.  
+Multiplications of these tags are also supported (10 Minutes, 3 Hours, etc.).
 
 For example, if a file is tagged with "1 Week" then it will be deleted at the time exactly one week from the last time the file was modified.
 
@@ -45,13 +46,7 @@ To get to the Tags area, right click on the file(s) you wish to tag and select "
 
 *Select Desired Tag*
 
-Assign one of the predetermined tags to the file (spelling/spacing are important, but the character case does not matter):
-
-- 1 Minute
-- 1 Hour
-- 1 Day
-- 1 Week
-- 1 Year
+Assign one of the available tags to the file (spelling/spacing is important, but the character case does not matter):
 
 ![Select Desired Tag](http://scottmw.com/wp-content/uploads/2014/09/tags-assign.png)
 
