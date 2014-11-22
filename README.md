@@ -1,5 +1,6 @@
 # OS X Self Destruct
 ==================
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/tdlm/os-x-self-destruct?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 **Author**: [Scott Weaver](http://scottmw.com/)
 
