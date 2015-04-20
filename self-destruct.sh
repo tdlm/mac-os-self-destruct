@@ -35,9 +35,9 @@ secure_delete_files_for_tag_after_seconds () {
 
         if [ $file_diff -ge $2 ]; then
         	if [ -f "$f" -o -L "$f" ]; then
-            	srm -f "$f"
+            	srm -fz "$f"
             elif [ -d "$f" ]; then
-            	srm -rf "$f"
+            	srm -fz "$f"
             fi
         fi;
     done
@@ -83,7 +83,7 @@ uninstall () {
 
 	if [ -f $script_install_path ]; then
 		echo "Removing script..."
-		srm -f $script_install_path
+		srm -fz $script_install_path
 	fi
 
 	if [ $is_plist_loaded -gt 0 ]; then
@@ -93,7 +93,7 @@ uninstall () {
 
 	if [ -f $plist_install_path ]; then
 		echo "Removing $plist_install_path..."
-		srm -f $plist_install_path
+		srm -fz $plist_install_path
 	fi
 
 	echo "Uninstall complete!"
