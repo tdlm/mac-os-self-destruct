@@ -1,4 +1,4 @@
-# OS X Self Destruct
+# macOS Self Destruct (Formerly OS X Self Destruct)
 ==================
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/tdlm/os-x-self-destruct?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -31,8 +31,8 @@ Tested to work on OS X 10.9, OS X 10.10
 #### INSTALLATION
 
 ```bash
-git clone git@github.com:tdlm/os-x-self-destruct.git
-./os-x-self-destruct/self-destruct.sh --install
+git clone git@github.com:tdlm/mac-os-self-destruct.git
+./mac-os-self-destruct/self-destruct.sh --install
 ```
 
 #### USAGE
