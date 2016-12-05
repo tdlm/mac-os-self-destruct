@@ -13,7 +13,6 @@ convert_tag_to_timestamp() {
 }
 
 secure_delete_files_for_tag_after_seconds () {
-
 	if [ -z "$1" ]; then
 		echo "-Parameter 1 required: Tag"
 		return 0
@@ -41,13 +40,12 @@ secure_delete_files_for_tag_after_seconds () {
             fi
         fi;
     done
-
 }
 
 load_configuration () {
 	script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 	script_install_path="/usr/local/bin/self-destruct"
-	plist_name="com.github.tdlm.os-x-self-destruct"
+	plist_name="com.github.tdlm.mac-os-self-destruct"
 	plist_path="$script_dir/$plist_name.plist"
 	plist_install_path="$HOME/Library/LaunchAgents/$plist_name.plist"
 	is_plist_loaded=$(launchctl list | grep -c "$plist_name")
@@ -100,11 +98,10 @@ uninstall () {
 }
 
 show_usage() {
-
 	cat <<EOF
-Self Destruct v${SELF_DESTRUCT_VERSION} for Mac OS X
+Self Destruct v${SELF_DESTRUCT_VERSION} for macOS
 
-Securely destroys files or directories on a delay based on their OS X "Tag"
+Securely destroys files or directories on a delay based on their macOS "Tag"
 
 Available Tags: 1 Minute, 1 Hour, 1 Day, 1 Week, 1 Month, 1 Year.
 Multiplications of these tags are also supported (10 Minutes, 3 Hours, etc.).
@@ -126,8 +123,8 @@ HELP
 
 INSTALLATION FROM REPOSITORY
 
-	git clone git@github.com:tdlm/os-x-self-destruct.git
-	./os-x-self-destruct/self-destruct.sh --install
+	git clone git@github.com:tdlm/mac-os-self-destruct.git
+	./mac-os-self-destruct/self-destruct.sh --install
 
 UNINSTALL
 
@@ -136,11 +133,9 @@ UNINSTALL
 Licensed under GNU GPL v2.0 by Scott Weaver <http://scottmw.com>
 EOF
 exit 2
-
 }
 
 if [ "$1" = "-r" -o "$1" = "--run" ]; then
-
 	TAGS=$(mdfind -0 "(kMDItemUserTags == '*')" | \
 		xargs -0 mdls -name kMDItemUserTags | grep '^    ' | cut -c5- | cut -d , -f 1 | sort -u)
 
