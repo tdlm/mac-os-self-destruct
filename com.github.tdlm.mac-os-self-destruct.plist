@@ -3,7 +3,7 @@
 <plist version="1.0">
 	<dict>
 		<key>Label</key>
-		<string>com.github.tdlm.os-x-self-destruct</string>
+		<string>com.github.tdlm.mac-os-self-destruct</string>
 
 		<key>ProgramArguments</key>
 		<array>
@@ -20,13 +20,10 @@
 		<key>RunAtLoad</key>
 		<true/>
 
-		<!-- log files
-		  <key>StandardErrorPath</key>
-		  <string>/tmp/os-x-self-destruct.err</string>
-
-		  <key>StandardOutPath</key>
-		  <string>/tmp/os-x-self-destruct.out</string>
-		-->
-
+        <key>StandardErrorPath</key>
+        <string>/tmp/mac-os-self-destruct.err</string>
+        
+        <key>StandardOutPath</key>
+        <string>/tmp/mac-os-self-destruct.out</string>
 	</dict>
 </plist>

@@ -34,9 +34,9 @@ secure_delete_files_for_tag_after_seconds () {
 
         if [ $file_diff -ge $2 ]; then
         	if [ -f "$f" -o -L "$f" ]; then
-            	srm -fz "$f"
+            	rm -f "$f"
             elif [ -d "$f" ]; then
-            	srm -fz "$f"
+            	rm -f "$f"
             fi
         fi;
     done
@@ -81,7 +81,7 @@ uninstall () {
 
 	if [ -f $script_install_path ]; then
 		echo "Removing script..."
-		srm -fz $script_install_path
+		rm -f $script_install_path
 	fi
 
 	if [ $is_plist_loaded -gt 0 ]; then
@@ -91,7 +91,7 @@ uninstall () {
 
 	if [ -f $plist_install_path ]; then
 		echo "Removing $plist_install_path..."
-		srm -fz $plist_install_path
+		rm -f $plist_install_path
 	fi
 
 	echo "Uninstall complete!"
@@ -108,10 +108,6 @@ Multiplications of these tags are also supported (10 Minutes, 3 Hours, etc.).
 
 For example, if a file is tagged with "1 Week" then it will be deleted at
 the time exactly one week from the last time the file was modified.
-
-WARNING:  This script uses srm (Secure Remove), which will not only erase
-the file(s), but will use a multi-pass erase which render the files
-un-recoverable and un-traceable.
 
 RUNNING MANUALLY
 
