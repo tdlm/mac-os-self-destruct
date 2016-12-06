@@ -1,100 +1,132 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-SELF_DESTRUCT_VERSION="0.92"
+SELF_DESTRUCT_VERSION="0.93"
 
 is_valid_timestamp() {
-	PATTERN='^[0-9]\+\s\(Minutes\?\|Hours\?\|Days\?\|Weeks\?\|Years\?\)$'
-	echo $* | grep -o $PATTERN > /dev/null
-	return $?
+  PATTERN='^[0-9]\+\s\(Minutes\?\|Hours\?\|Days\?\|Weeks\?\|Years\?\)$'
+  echo $* | grep -o $PATTERN > /dev/null
+  return $?
 }
 
 convert_tag_to_timestamp() {
-	echo $(($(date -d "+$1" "+%s") - $(date "+%s")))
+  if [[ $1 =~ ^([0-9]+)\ ([A-Za-z]+)$ ]]; then
+    DT=$(echo ${BASH_REMATCH[1]} | xargs)
+    DF=$(echo ${BASH_REMATCH[2]} | xargs | tr '[:upper:]' '[:lower:]')
+    
+    case ${DF} in
+      second|seconds)
+        DF='S'
+      ;;
+      minute|minutes)
+        DF='M'
+      ;;
+      hour|hours)
+        DF='H'
+      ;;
+      day|days)
+        DF='d'
+      ;;
+      week|weeks)
+        DF='w'
+      ;;
+      month|months)
+        DF='m'
+      ;;
+      year|years)
+        DF='y'
+      ;;
+      *)
+        echo "DF (Date Format) wrong!"
+        exit 1
+    esac
+  fi
+  
+  echo $(($(date -j -v "+${DT}${DF}" "+%s") - $(date -j "+%s")))
 }
 
 secure_delete_files_for_tag_after_seconds () {
-	if [ -z "$1" ]; then
-		echo "-Parameter 1 required: Tag"
-		return 0
-	fi;
-
-	if [ -z "$2" ]; then
-		echo "-Parameter 2 required: Seconds"
-		return 0
-	elif [[ ! $2 =~ ^-?[0-9]+$ ]]; then
-		echo "-Parameter 2 must be an integer!"
-		return 0
-	fi;
-
-    current_stamp=$(date +%s)
-
-    mdfind "tag:$1" | while read f; do
-        file_modified=$(stat -c%Y "$f")
-        file_diff=$((current_stamp-file_modified))
-
-        if [ $file_diff -ge $2 ]; then
-        	if [ -f "$f" -o -L "$f" ]; then
-            	rm -f "$f"
-            elif [ -d "$f" ]; then
-            	rm -f "$f"
-            fi
-        fi;
-    done
+  if [ -z "$1" ]; then
+    echo "-Parameter 1 required: Tag"
+    return 0
+  fi;
+  
+  if [ -z "$2" ]; then
+    echo "-Parameter 2 required: Seconds"
+    return 0
+    elif [[ ! $2 =~ ^-?[0-9]+$ ]]; then
+    echo "-Parameter 2 must be an integer!"
+    return 0
+  fi;
+  
+  current_stamp=$(date +%s)
+  
+  mdfind "tag:$1" | while read f; do
+    file_modified=$(stat -f%Y "$f")
+    file_diff=$((current_stamp-file_modified))
+    
+    if [ $file_diff -ge $2 ]; then
+      if [ -f "$f" -o -L "$f" ]; then
+        rm -f "$f"
+        elif [ -d "$f" ]; then
+        rm -f "$f"
+      fi
+    fi;
+  done
 }
 
 load_configuration () {
-	script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-	script_install_path="/usr/local/bin/self-destruct"
-	plist_name="com.github.tdlm.mac-os-self-destruct"
-	plist_path="$script_dir/$plist_name.plist"
-	plist_install_path="$HOME/Library/LaunchAgents/$plist_name.plist"
-	is_plist_loaded=$(launchctl list | grep -c "$plist_name")
+  script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+  script_install_path="/usr/local/bin/self-destruct"
+  plist_name="com.github.tdlm.mac-os-self-destruct"
+  plist_path="$script_dir/$plist_name.plist"
+  plist_install_path="$HOME/Library/LaunchAgents/$plist_name.plist"
+  is_plist_loaded=$(launchctl list | grep -c "$plist_name")
 }
 
 install () {
-	load_configuration
-
-	echo "Copying self to $script_install_path"
-	cp -f $0 $script_install_path
-	chmod +x $script_install_path
-
-	local user=`whoami`
-
-	if [ $is_plist_loaded -gt 0 ]; then
-		echo "Plist found. Unloading before install..."
-		launchctl unload $plist_install_path
-	else
-		echo "Plist not found. Loading fresh..."
-	fi
-
-	echo "Generating plist for user and installing: $plist_install_path"
-	cat $plist_path | sed -e "s#{SCRIPT_INSTALL_PATH}#'$script_install_path'#g" > $plist_install_path
-	launchctl load -w -F $plist_install_path
-
-	echo "Installation complete!"
+  load_configuration
+  
+  echo "Copying self to $script_install_path"
+  cp -f $0 $script_install_path
+  chmod +x $script_install_path
+  
+  local user=`whoami`
+  
+  if [ $is_plist_loaded -gt 0 ]; then
+    echo "Plist found. Unloading before install..."
+    launchctl unload $plist_install_path
+  else
+    echo "Plist not found. Loading fresh..."
+  fi
+  
+  echo "Generating plist for user and installing: $plist_install_path"
+  cat $plist_path | sed -e "s#{SCRIPT_INSTALL_PATH}#'$script_install_path'#g" > $plist_install_path
+  launchctl load -w -F $plist_install_path
+  
+  echo "Installation complete!"
 }
 
 uninstall () {
-	load_configuration
-
-	local is_plist_loaded=$(launchctl list | grep -c "$plist_name")
-
-	if [ -f $script_install_path ]; then
-		echo "Removing script..."
-		rm -f $script_install_path
-	fi
-
-	if [ $is_plist_loaded -gt 0 ]; then
-		echo "Unloading plist"
-		launchctl unload $plist_install_path
-	fi
-
-	if [ -f $plist_install_path ]; then
-		echo "Removing $plist_install_path..."
-		rm -f $plist_install_path
-	fi
-
-	echo "Uninstall complete!"
+  load_configuration
+  
+  local is_plist_loaded=$(launchctl list | grep -c "$plist_name")
+  
+  if [ -f $script_install_path ]; then
+    echo "Removing script..."
+    rm -f $script_install_path
+  fi
+  
+  if [ $is_plist_loaded -gt 0 ]; then
+    echo "Unloading plist"
+    launchctl unload $plist_install_path
+  fi
+  
+  if [ -f $plist_install_path ]; then
+    echo "Removing $plist_install_path..."
+    rm -f $plist_install_path
+  fi
+  
+  echo "Uninstall complete!"
 }
 
 show_usage() {
@@ -128,22 +160,23 @@ UNINSTALL
 
 Licensed under GNU GPL v2.0 by Scott Weaver <http://scottmw.com>
 EOF
-exit 2
+  exit 2
 }
 
 if [ "$1" = "-r" -o "$1" = "--run" ]; then
-	TAGS=$(mdfind -0 "(kMDItemUserTags == '*')" | \
-		xargs -0 mdls -name kMDItemUserTags | grep '^    ' | cut -c5- | cut -d , -f 1 | sort -u)
-
-	while read -r TAG; do
-		# Remove quotes
-		TAG=$(echo -n $TAG | tr -d '"')
-
-		if is_valid_timestamp $TAG; then
-			secure_delete_files_for_tag_after_seconds "$TAG" $(convert_tag_to_timestamp "$TAG")
-		else
-			echo "Invalid tag: $TAG"
-		fi
+  TAGS=$(mdfind -0 "(kMDItemUserTags == '*')" | \
+  xargs -0 mdls -name kMDItemUserTags | grep '^    ' | cut -c5- | cut -d , -f 1 | sort -u)
+  
+  while read -r TAG; do
+    # Remove quotes
+    TAG=$(echo -n $TAG | tr -d '"')
+    
+    if is_valid_timestamp $TAG; then
+      echo "Convert tag: $TAG"
+      secure_delete_files_for_tag_after_seconds "$TAG" $(convert_tag_to_timestamp "$TAG")
+    else
+      echo "Invalid tag: $TAG"
+    fi
 	done <<< "$TAGS"
 
 elif [ "$1" = "-i" -o "$1" = "--install" ]; then

@@ -10,6 +10,9 @@
 			<string>{SCRIPT_INSTALL_PATH}</string>
 			<string>--run</string>
 		</array>
+        
+        <key>OnDemand</key>
+        <false/>
 
 		<key>Nice</key>
 		<integer>1</integer>
