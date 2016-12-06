@@ -8,7 +8,7 @@
 
 **Version**: 0.92
 
-Securely destroys files or directories on a delay based on their OS X "Tag."
+Securely destroys files or directories on a delay based on their macOS "Tag."
 
 Available Tags: 1 Minute, 1 Hour, 1 Day, 1 Week, 1 Month, 1 Year.  
 Multiplications of these tags are also supported (10 Minutes, 3 Hours, etc.).
@@ -18,7 +18,7 @@ For example, if a file is tagged with "1 Week" then it will be deleted at the ti
 This allows you to put a self-destruct on files you would otherwise forget about, leaving your system crowded with junk.
 
 ### SYSTEM REQUIREMENTS
-Tested to work on OS X 10.9, OS X 10.10
+Tested to work on macOS (will update this as it is re-tested on older variants)
 
 ### HELP
 
