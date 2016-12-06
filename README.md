@@ -6,7 +6,7 @@
 
 **License**: GNU GPL v2.0 (see LICENSE.txt)
 
-**Version**: 0.92
+**Version**: 0.93
 
 Securely destroys files or directories on a delay based on their macOS "Tag."
 
